@@ -1,0 +1,149 @@
+{
+  "api": {
+    "services": [
+      "HandlerService",
+      "LoggerService",
+      "StatsService"
+    ],
+    "tag": "api"
+  },
+  "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 62789,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "127.0.0.1"
+      },
+      "tag": "api"
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 22471,
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "alterId": 64,
+            "id": "185d6921-a2fd-4a5c-9c5e-c06ed4964772"
+          }
+        ],
+        "disableInsecureEncryption": false
+      },
+      "sniffing": {
+        "destOverride": [
+          "http",
+          "tls"
+        ],
+        "enabled": true
+      },
+      "streamSettings": {
+        "httpSettings": {
+          "host": [],
+          "path": "/"
+        },
+        "network": "http",
+        "security": "tls",
+        "tlsSettings": {
+          "allowInsecure": true,
+          "certificates": [
+            {
+              "certificateFile": "/etc/v2ray/v2ray.crt",
+              "keyFile": "/etc/v2ray/v2ray.key"
+            }
+          ],
+          "serverName": "huojia1.win"
+        }
+      },
+      "tag": "inbound-22471"
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 27351,
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "alterId": 64,
+            "id": "74384aba-249c-4f7b-8867-169afe871379"
+          }
+        ],
+        "disableInsecureEncryption": false
+      },
+      "sniffing": {
+        "destOverride": [
+          "http",
+          "tls"
+        ],
+        "enabled": true
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "tlsSettings": {
+          "allowInsecure": true,
+          "certificates": [
+            {
+              "certificateFile": "/etc/v2ray/v2ray.crt",
+              "keyFile": "/etc/v2ray/v2ray.key"
+            }
+          ],
+          "serverName": "huojia1.win"
+        },
+        "wsSettings": {
+          "headers": {},
+          "path": "/"
+        }
+      },
+      "tag": "inbound-27351"
+    }
+  ],
+  "log": {
+    "access": "/var/log/v2ray/access.log",
+    "error": "/var/log/v2ray/error.log",
+    "loglevel": "warning"
+  },
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {}
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {},
+      "tag": "blocked"
+    }
+  ],
+  "policy": {
+    "system": {
+      "statsInboundDownlink": true,
+      "statsInboundUplink": true
+    }
+  },
+  "routing": {
+    "rules": [
+      {
+        "inboundTag": [
+          "api"
+        ],
+        "outboundTag": "api",
+        "type": "field"
+      },
+      {
+        "ip": [
+          "geoip:private"
+        ],
+        "outboundTag": "blocked",
+        "type": "field"
+      },
+      {
+        "outboundTag": "blocked",
+        "protocol": [
+          "bittorrent"
+        ],
+        "type": "field"
+      }
+    ]
+  },
+  "stats": {}
+}
